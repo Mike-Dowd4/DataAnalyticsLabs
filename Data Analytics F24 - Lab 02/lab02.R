@@ -4,7 +4,7 @@ populations_2023 <- read.csv("countries_populations_2023.csv", header = TRUE)
 epi_results <- read.csv("epi2024results06022024.csv", header = TRUE)
 epi_weights <- read.csv("epi2024weights.csv", header = TRUE)
 
-attach(epi_weights)
+attach(epi_results)
 
 qqnorm(EPI.new)
 qqline(EPI.new)
@@ -76,13 +76,44 @@ epi_results.sub <- epi_results[-which(!epi_results$country %in% populations$Coun
 epi_results.sub <- epi_results.sub[order(epi_results.sub$country),]
 
 #only keep necessary columns
-epi_results.sub <- epi_results.sub[, c("country", "EPI.old", "EPI.new")]
+epi_results.sub <- epi_results.sub[, c("country", "EPI.old", "EPI.new", "ECO.old", "ECO.new")]
 
 #convert population to numberic
 epi_results.sub$population <- as.numeric(populations$Population)
 
 #compute population log base 10
 epi_results.sub$population_log <- log10(epi_results.sub$population)
-
+attach(epi_results.sub)
 
 #Linear Model in R
+lin.mod.epinew <- lm(EPI.new~population_log,epi_results.sub)
+
+plot(EPI.new~population_log)
+abline(lin.mod.epinew)
+
+summary(lin.mod.epinew)
+plot(lin.mod.epinew)
+
+library(ggplot2)
+
+ggplot(epi_results.sub, aes(x = population_log, y = EPI.new)) +
+  geom_point() +
+  stat_smooth(method = "lm")
+
+ggplot(lin.mod.epinew, aes(x = .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  labs(title='Residual vs. Fitted Values Plot', x='Fitted Values', y='Residuals')
+
+
+#try with ECO variable
+lin.mod.epinew <- lm(ECO.new~population_log,epi_results.sub)
+
+ggplot(epi_results.sub, aes(x = population_log, y = ECO.new)) +
+  geom_point() +
+  stat_smooth(method = "lm")
+
+ggplot(lin.mod.epinew, aes(x = .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  labs(title='Residual vs. Fitted Values Plot', x='Fitted Values', y='Residuals')
