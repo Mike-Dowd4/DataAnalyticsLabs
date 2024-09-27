@@ -1,0 +1,18 @@
+Sepal.Length and Sepal.Width vs species 
+
+KNNpred      setosa versicolor virginica
+  setosa         16          0         0
+  versicolor      1          6         2
+  virginica       0          6        14
+
+=0.8 accuracy
+
+
+Petal.length and Petal.width vs species
+
+KNNpred      setosa versicolor virginica
+  setosa         15          0         0
+  versicolor      0         16         1
+  virginica       0          0        13
+
+= 0.977 accuracy (much better)

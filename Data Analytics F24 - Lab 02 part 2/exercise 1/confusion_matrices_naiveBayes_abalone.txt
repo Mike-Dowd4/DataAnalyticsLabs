@@ -1,0 +1,25 @@
+For the Length, Diameter, Height attributes against age.group
+
+ 	actual
+predicted young adult  old
+    young   988   291   78
+    adult   404  1170  561
+    old      15   349  320
+
+
+For the Whole weight, Shucked weight, Viscera weight, Shell weight attributes against age.group
+
+	actual
+predicted young adult  old
+    young  1164   507  191
+    adult   238  1019  489
+    old       5   284  279
+
+
+For the Length, Whole weight, Shell weight attributes against age.group
+
+         actual
+predicted young adult  old
+    young  1126   417  139
+    adult   275  1118  529
+    old       6   275  291
