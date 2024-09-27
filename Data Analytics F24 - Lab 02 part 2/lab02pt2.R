@@ -118,6 +118,8 @@ for (k in ks) {
 }
 plot(ks,accuracy,type = "b", ylim = c(0.95,1.0), main="k value vs acc for sepal.length and sepal.width")
 
+
+## ------------------------------EXERCISE 3--------------------------
 library(tidyverse)
 # Plot iris petal length vs. petal width, color by species
 ggplot(iris, aes(x = Petal.Length, y = Petal.Width, colour = Species)) +
@@ -171,11 +173,10 @@ assigned.clusters <- as.factor(abalone.km$cluster)
 ggplot(abalone, aes(x = Length, y = Diameter, colour = assigned.clusters)) +
   geom_point()
 
-
 wss <- c()
 ks <- c(2,3,4,5,6,7,8,9,10,11,12,13)
 for (k in ks) {
-  iris.km <- kmeans(abalone[, 2:9], centers = k)
+  abalone.km <- kmeans(abalone[, 2:9], centers = k)
   wss <- c(wss,abalone.km$tot.withinss)
 }
 plot(ks,wss,type = "b", main = "wss vs k-value for kmeans abalone")
@@ -186,3 +187,13 @@ labeled.clusters[labeled.clusters==1] <- "young"
 labeled.clusters[labeled.clusters==2] <- "adult"
 labeled.clusters[labeled.clusters==3] <- "old"
 table(labeled.clusters, abalone[,10])
+
+
+#k=10 seems to be good
+# set seed for random number generator
+set.seed(123)
+# run k-means
+abalone.km <- kmeans(abalone[,2:9], centers = 10)
+assigned.clusters <- as.factor(abalone.km$cluster)
+ggplot(abalone, aes(x = Length, y = Diameter, colour = assigned.clusters)) +
+  geom_point()

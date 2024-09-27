@@ -4,3 +4,14 @@ labeled.clusters setosa versicolor virginica
       setosa         50          0         0
       versivolor      0         48        14
       virginica       0          2        36
+
+
+
+Confusion matrix for kmeans on abalone:
+
+labeled.clusters young adult  old
+           adult  1407     0    0
+           old       0  1810  267
+           young     0     0  692
+
+extremely good
