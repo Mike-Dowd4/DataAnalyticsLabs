@@ -77,8 +77,112 @@ iris.test <-iris.norm[-s_iris,]
 
 k <- ceiling(sqrt(training_size))
 library(class)
-KNNpred <- knn(train = iris.train[-5], test = iris.test[-5], cl = iris.train[,5], k = k)
+KNNpred <- knn(train = iris.train[1:2], test = iris.test[1:2], cl = iris.train[,5], k = k)
 contingency.table <- table(KNNpred,iris.test[,5])
 
 contingency.matrix = as.matrix(contingency.table)
 contingency.matrix
+
+sum(diag(contingency.matrix))/length(iris.test[,5])
+accuracy <- c()
+ks <- c(7,8,9,10,11,12,13,14,15)
+for (k in ks) {
+  KNNpred <- knn(train = iris.train[1:2], test = iris.test[1:2], cl = iris.train$Species, k = k)
+  cm = as.matrix(table(Actual=KNNpred, Predicted = iris.test$Species, dnn=list('predicted','actual')))
+  accuracy <- c(accuracy,sum(diag(cm))/length(iris.test$Species))
+}
+plot(ks,accuracy,type = "b", ylim = c(0.60,1.0), main="k value vs acc for sepal.length and sepal.width")
+
+
+## Same analysis with features 3:4 = Petal.length and Petal.width
+
+#new sample
+s_iris = sample(nrow(iris), training_size)
+
+iris.train <-iris.norm[s_iris,]
+iris.test <-iris.norm[-s_iris,]
+
+KNNpred <- knn(train = iris.train[3:4], test = iris.test[3:4], cl = iris.train[,5], k = k)
+contingency.table <- table(KNNpred,iris.test[,5])
+
+contingency.matrix = as.matrix(contingency.table)
+contingency.matrix
+
+sum(diag(contingency.matrix))/length(iris.test[,5])
+accuracy <- c()
+ks <- c(1,2,3,4,5,6,7,8,9,10,11)
+for (k in ks) {
+  KNNpred <- knn(train = iris.train[3:4], test = iris.test[3:4], cl = iris.train$Species, k = k)
+  cm = as.matrix(table(Actual=KNNpred, Predicted = iris.test$Species, dnn=list('predicted','actual')))
+  accuracy <- c(accuracy,sum(diag(cm))/length(iris.test$Species))
+}
+plot(ks,accuracy,type = "b", ylim = c(0.95,1.0), main="k value vs acc for sepal.length and sepal.width")
+
+library(tidyverse)
+# Plot iris petal length vs. petal width, color by species
+ggplot(iris, aes(x = Petal.Length, y = Petal.Width, colour = Species)) +
+  geom_point()
+
+
+# set seed for random number generator
+set.seed(123)
+# run k-means
+iris.km <- kmeans(iris[,-5], centers = 3)
+assigned.clusters <- as.factor(iris.km$cluster)
+ggplot(iris, aes(x = Petal.Length, y = Petal.Width, colour = assigned.clusters)) +
+  geom_point()
+    
+
+wss <- c()
+ks <- c(2,3,4,5,6,7,8,9,10,11,12,13)
+for (k in ks) {
+  iris.km <- kmeans(iris[,-5], centers = k)
+  wss <- c(wss,iris.km$tot.withinss)
+}
+plot(ks,wss,type = "b", main = "wss vs k-value for kmeans iris")
+
+
+labeled.clusters <- as.character(assigned.clusters)
+labeled.clusters[labeled.clusters==1] <- "setosa"
+labeled.clusters[labeled.clusters==2] <- "versivolor"
+labeled.clusters[labeled.clusters==3] <- "virginica"
+table(labeled.clusters, iris[,5])
+
+#k=12 seems to work well, run k-means with k=12
+
+# set seed for random number generator
+set.seed(123)
+# run k-means
+iris.km <- kmeans(iris[,-5], centers = 12)
+assigned.clusters <- as.factor(iris.km$cluster)
+ggplot(iris, aes(x = Petal.Length, y = Petal.Width, colour = assigned.clusters)) +
+  geom_point()
+
+
+#plot actual clusters
+ggplot(abalone, aes(x = Length, y = Diameter, colour = age.group)) +
+  geom_point()
+
+# set seed for random number generator
+set.seed(123)
+# run k-means
+abalone.km <- kmeans(abalone[,2:9], centers = 3)
+assigned.clusters <- as.factor(abalone.km$cluster)
+ggplot(abalone, aes(x = Length, y = Diameter, colour = assigned.clusters)) +
+  geom_point()
+
+
+wss <- c()
+ks <- c(2,3,4,5,6,7,8,9,10,11,12,13)
+for (k in ks) {
+  iris.km <- kmeans(abalone[, 2:9], centers = k)
+  wss <- c(wss,abalone.km$tot.withinss)
+}
+plot(ks,wss,type = "b", main = "wss vs k-value for kmeans abalone")
+
+
+labeled.clusters <- as.character(assigned.clusters)
+labeled.clusters[labeled.clusters==1] <- "young"
+labeled.clusters[labeled.clusters==2] <- "adult"
+labeled.clusters[labeled.clusters==3] <- "old"
+table(labeled.clusters, abalone[,10])

@@ -1,0 +1,6 @@
+Confusion matrix for kmeans on iris
+
+labeled.clusters setosa versicolor virginica
+      setosa         50          0         0
+      versivolor      0         48        14
+      virginica       0          2        36
