@@ -32,7 +32,7 @@ qqline(epi.southern_asia$MHP)
 
 
 #---------------------Linear Models---------------------------
-
+attach(EPI)
 data <- EPI[, c('ECO', 'BDH', 'PAR', 'SPI', 'TBN')]
 #Linear Model in R
 lin.mod.epi <- lm(EPI$EPI~ECO+BDH+PAR+SPI+TBN, data)
@@ -50,8 +50,8 @@ attach(epi.eastern_europe)
 
 data <- epi.eastern_europe[, c('ECO', 'BDH', 'PAR', 'SPI', 'TBN')]
 #Linear Model in R
-lin.mod.epi <- lm(epi.eastern_europe$EPI~ECO+BDH+PAR+SPI+TBN, data)
-summary(lin.mod.epi)
+lin.mod.epi.eastern_europe <- lm(epi.eastern_europe$EPI~ECO+BDH+PAR+SPI+TBN, data)
+summary(lin.mod.epi.eastern_europe)
 
 
 ##ECO has the largest coefficient and lowest P-value, influences EPI the most
@@ -59,4 +59,4 @@ summary(lin.mod.epi)
 ##rule out that there's no association(that the coeff is zero)
 
 plot(ECO, epi.eastern_europe$EPI, main = "ECO vs EPI for eastern europe")
-abline(lin.mod.epi$coefficients['(Intercept)'], lin.mod.epi$coefficients['ECO'])
+abline(lin.mod.epi.eastern_europe$coefficients['(Intercept)'], lin.mod.epi.eastern_europe$coefficients['ECO'])
