@@ -1,0 +1,9 @@
+2.2)
+
+The model with all of the data used for training the model is certainly better.
+The p-value for all of the variables with significant coefficients is much lower, 
+giving us much more confidence that the null hypothesis of no association between
+each individual variable and EPI is not true. 
+
+ECO p-value for all data:              >2e-16
+ECO p-value for eastern_europe subset: 0.273 (typically must be at most 0.05 to reject null hypothesis).
