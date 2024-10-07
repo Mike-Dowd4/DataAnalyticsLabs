@@ -60,3 +60,58 @@ summary(lin.mod.epi.eastern_europe)
 
 plot(ECO, epi.eastern_europe$EPI, main = "ECO vs EPI for eastern europe")
 abline(lin.mod.epi.eastern_europe$coefficients['(Intercept)'], lin.mod.epi.eastern_europe$coefficients['ECO'])
+
+
+
+##--------------------------Classification(KNN)--------------------------
+library(class)
+
+#Get 3 regions and choose 5 variables
+kNNData = EPI[which(EPI$region %in% c('Eastern Europe', 'Greater Middle East', 'Asia-Pacific')), ]
+kNNData = kNNData[, c('EPI', 'ECO', 'BDH', 'TBN', 'TKP', 'region')]
+
+n = nrow(kNNData)
+train.indices = sample(n, n*0.7)
+
+kNN.training = kNNData[train.indices, ]
+kNN.test = kNNData[-train.indices, ]
+kNN.training[-6]
+k = ceiling(sqrt(n))
+kNNpred = knn(kNN.training[,-6], kNN.test[-6], kNN.training[,'region'] )
+
+kNNpred
+
+contingency.table <- table(Predicted = kNNpred, Actual=kNN.test[,'region'])
+
+print(contingency.table)
+
+contingency.matrix = as.matrix(contingency.table)
+accuracy_1 = sum(diag(contingency.matrix))/(n-length(train.indices))
+##accuracy = 0.66666666667
+
+
+##Try with 3 different regions
+kNNData = EPI[which(EPI$region %in% c('Global West', 'Former Soviet States', 'Latin America & Caribbean')), ]
+kNNData = kNNData[, c('EPI', 'ECO', 'BDH', 'TBN', 'TKP', 'region')]
+
+n = nrow(kNNData)
+train.indices = sample(n, n*0.7)
+
+kNN.training = kNNData[train.indices, ]
+kNN.test = kNNData[-train.indices, ]
+
+
+##--------------------Clustering--------------------------------
+
+
+
+k = ceiling(sqrt(n))
+kNNpred = knn(kNN.training[,-6], kNN.test[-6], kNN.training[,'region'] )
+
+contingency.table <- table(Predicted = kNNpred, Actual=kNN.test[,'region'])
+
+print(contingency.table)
+
+contingency.matrix = as.matrix(contingency.table)
+accuracy_2 = sum(diag(contingency.matrix))/(n-length(train.indices))
+##accuracy = 0.8

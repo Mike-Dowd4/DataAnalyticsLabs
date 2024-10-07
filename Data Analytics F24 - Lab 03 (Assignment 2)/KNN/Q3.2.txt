@@ -1,0 +1,10 @@
+3.2)
+I had 2 models, both with features 'EPI', 'ECO', 'BDH', 'TBN', 'TKP'
+
+One model had the regions: 'Eastern Europe', 'Greater Middle East', 'Asia-Pacific'
+and the other had the regions: 'Global West', 'Former Soviet States', 'Latin America & Caribbean'
+
+
+The second model ended up being better as it had a better overall accuracy, the first accuracy was 67%,
+while my second model had an accuracy of 80%. It is important to note that my second model had slightly
+more data points than the first.
