@@ -1,0 +1,6 @@
+4.1.1)
+The first model has a larger sum of squares within the clusters, making it a worser clustering
+compared to the second model.
+
+4.1.2)
+Both plots show the within cluster sum of squares decreasing as k increases. This is expected, however the second model decreases to a lower sum of squares, making it still seem to be the better model.

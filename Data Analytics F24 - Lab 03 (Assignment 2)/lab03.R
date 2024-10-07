@@ -90,6 +90,7 @@ accuracy_1 = sum(diag(contingency.matrix))/(n-length(train.indices))
 ##accuracy = 0.66666666667
 
 
+
 ##Try with 3 different regions
 kNNData = EPI[which(EPI$region %in% c('Global West', 'Former Soviet States', 'Latin America & Caribbean')), ]
 kNNData = kNNData[, c('EPI', 'ECO', 'BDH', 'TBN', 'TKP', 'region')]
@@ -99,10 +100,6 @@ train.indices = sample(n, n*0.7)
 
 kNN.training = kNNData[train.indices, ]
 kNN.test = kNNData[-train.indices, ]
-
-
-##--------------------Clustering--------------------------------
-
 
 
 k = ceiling(sqrt(n))
@@ -115,3 +112,79 @@ print(contingency.table)
 contingency.matrix = as.matrix(contingency.table)
 accuracy_2 = sum(diag(contingency.matrix))/(n-length(train.indices))
 ##accuracy = 0.8
+
+
+
+
+
+##--------------------Clustering--------------------------------
+
+library(tidyverse)
+
+## set random number generator start value
+set.seed(123)
+
+#select data
+kmData = EPI[which(EPI$region %in% c('Eastern Europe', 'Greater Middle East', 'Asia-Pacific')), ]
+kmData = kNNData[, c('EPI', 'ECO', 'BDH', 'TBN', 'TKP', 'region')]
+
+## train kmeans
+kmData.km <- kmeans(kmData[,-6], centers = 3)
+
+## WCSS: total within cluster sum of squares
+kmData.km$tot.withinss
+
+##withinss = 46654.3
+
+set.seed(123)
+
+#select data
+kmData = EPI[which(EPI$region %in% c('Global West', 'Former Soviet States', 'Latin America & Caribbean')), ]
+kmData = kNNData[, c('EPI', 'ECO', 'BDH', 'TBN', 'TKP', 'region')]
+
+## train kmeans
+kmData.km <- kmeans(kmData[,-6], centers = 3)
+
+## WCSS: total within cluster sum of squares
+kmData.km$tot.withinss
+
+## withinss = 44520.56
+
+
+## run tests with multiple k values and plot WCSS
+
+kmData = EPI[which(EPI$region %in% c('Eastern Europe', 'Greater Middle East', 'Asia-Pacific')), ]
+kmData = kNNData[, c('EPI', 'ECO', 'BDH', 'TBN', 'TKP', 'region')]
+wcss <- c()
+ks <- c(2,3,4,5,6,7,8)
+
+for (k in ks) {
+  
+  kmData.km <- kmeans(kmData[,-6], centers = k)
+  
+  wcss <- c(wcss,kmData.km$tot.withinss)
+  
+}
+
+plot(ks,wcss,type = "b", main="First Model(europe, mideast, asia-pac)")
+
+
+
+## run tests with multiple k values and plot WCSS(second model)
+
+kmData = EPI[which(EPI$region %in% c('Global West', 'Former Soviet States', 'Latin America & Caribbean')), ]
+kmData = kNNData[, c('EPI', 'ECO', 'BDH', 'TBN', 'TKP', 'region')]
+wcss <- c()
+ks <- c(2,3,4,5,6,7,8)
+
+for (k in ks) {
+  
+  kmData.km <- kmeans(kmData[,-6], centers = k)
+  
+  wcss <- c(wcss,kmData.km$tot.withinss)
+  
+}
+
+plot(ks,wcss,type = "b", main="Second Model(glob west, fmr soviet states, latin am+caribb)")
+
+
