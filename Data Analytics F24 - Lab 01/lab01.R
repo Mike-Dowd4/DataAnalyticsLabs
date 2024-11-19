@@ -1,5 +1,5 @@
 
-setwd("C:/Users/Mike/Documents/RPI/Fall 2024/Data Analytics/Data Analytics F24 - Lab 01")
+setwd("C:/Users/Mike/Documents/RPI/Fall 2024/DataAnalyticsLabs/Data Analytics F24 - Lab 01")
 
 EPI_data_csv <- read.csv("epi2024results06022024.csv", header = TRUE)
 
